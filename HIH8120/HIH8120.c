@@ -57,8 +57,7 @@ void HIH8120_requestParam(void)
 void HIH8120_recieve(void)
 {
 	
-	uint8_t i = 0;
-	//i2c_mode_addr_config(I2C0, I2C_I2CMODE_ENABLE, I2C_ADDFORMAT_7BITS, HIH8120_ADDRESS);
+    uint8_t i = 0;
 	
     while(i2c_flag_get(I2C0, I2C_FLAG_I2CBSY)){}
 
@@ -69,8 +68,6 @@ void HIH8120_recieve(void)
     while(!i2c_flag_get(I2C0, I2C_FLAG_SBSEND)){} 
     /* send slave address to I2C bus */
     i2c_master_addressing(I2C0, HIH8120_ADDRESS << 1, I2C_RECEIVER);
-    /* disable ACK before clearing ADDSEND bit */
-    //i2c_ack_config(I2C1, I2C_ACK_DISABLE);
     /* wait until ADDSEND bit is set */
     uint32_t k = 0;
 	while (!i2c_flag_get(I2C0, I2C_FLAG_ADDSEND)) 
@@ -113,7 +110,6 @@ void HIH8120_recieve(void)
 		
 }
 
-
 void HIH8120_getMeasures( double *measuresArr)
 {
 	uint32_t HIH8120_ADC_Raw;
@@ -126,7 +122,7 @@ void HIH8120_getMeasures( double *measuresArr)
 	
 	if(~HIH8120_RX_Data[0] & 0x80)
 	{
-		/* Convert to Temperature in °C */
+		/* Convert to Temperature in Â°C */
         HIH8120_ADC_Raw = (((uint32_t)HIH8120_RX_Data[2] << 6) | ((uint32_t)HIH8120_RX_Data[3] >> 2));
 		HIH8120_Temperature = (float)(HIH8120_ADC_Raw * 165.00 / 16382.00) - 40.00;
 		/* Convert to Relative Humidity in % */
