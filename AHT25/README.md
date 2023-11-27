@@ -1,4 +1,4 @@
-Modules for sensor AHT25 Temperature and Humidity 
+Modules for I2C sensor AHT25 - Temperature and Humidity 
 
 ![6eda94370ecf0f8aa38f4076c209721e](https://github.com/alekseyProsk/Various-sensors-/assets/67463572/fe408076-ecc4-471c-9b49-38036827716d)
 
