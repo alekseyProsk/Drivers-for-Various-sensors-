@@ -27,19 +27,20 @@ void HIH8120_requestParam(void)
 	while (!i2c_flag_get(I2C0, I2C_FLAG_ADDSEND)) 
 	{
         if (i2c_flag_get(I2C0, I2C_FLAG_AERR)) 
-	{
+		{
             i2c_flag_clear(I2C0, I2C_FLAG_AERR);
             i2c_stop_on_bus(I2C0);
             return;
         }
         // in case no bus is connected
         if (k++ > 1000 * 100)
-				{
+		{
             i2c_stop_on_bus(I2C0);
             return;
         }
     };
-	i2c_flag_clear(I2C0, I2C_FLAG_ADDSEND);////must be
+	i2c_flag_clear(I2C0, I2C_FLAG_ADDSEND);
+	
 	while(!i2c_flag_get(I2C0, I2C_FLAG_TBE)){}//
 		
 	i2c_ack_config(I2C0, I2C_ACKPOS_CURRENT);
@@ -132,5 +133,4 @@ void HIH8120_getMeasures( double *measuresArr)
 		
 	measuresArr[0] = HIH8120_Temperature;
 	measuresArr[1] = HIH8120_Humidity;
-	
 }
