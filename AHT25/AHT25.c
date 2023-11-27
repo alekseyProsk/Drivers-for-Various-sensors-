@@ -11,12 +11,9 @@ uint32_t AHT25_ADC_Raw;
 
 void AHT25_sendCmd(uint8_t cmd)
 {
-	
-	//i2c_mode_addr_config(I2C1, I2C_I2CMODE_ENABLE, I2C_ADDFORMAT_10BITS, AHT25_Adress);
-    
     uint32_t k = 0;
 	
-	while(i2c_flag_get(I2C1, I2C_FLAG_I2CBSY))
+   while(i2c_flag_get(I2C1, I2C_FLAG_I2CBSY))
    {
         
         if (k++ > 1000 * 10)
@@ -39,14 +36,14 @@ void AHT25_sendCmd(uint8_t cmd)
 	while (!i2c_flag_get(I2C1, I2C_FLAG_ADDSEND)) 
 	{
         if (i2c_flag_get(I2C1, I2C_FLAG_AERR)) 
-				{
+		{
             i2c_flag_clear(I2C1, I2C_FLAG_AERR);
             i2c_stop_on_bus(I2C1);
             return;
         }
         // in case no bus is connected
         if (k++ > 1000 * 10)
-	{
+		{
             i2c_stop_on_bus(I2C1);
             return;
         }
@@ -58,14 +55,13 @@ void AHT25_sendCmd(uint8_t cmd)
 	i2c_ack_config(I2C1, I2C_ACKPOS_CURRENT);
 		
     i2c_data_transmit(I2C1, cmd);
-        /* wait until the TBE bit is set */
+    /* wait until the TBE bit is set */
     while(!i2c_flag_get(I2C1, I2C_FLAG_TBE));
 		
 	while(!i2c_flag_get(I2C1, I2C_FLAG_TBE));
 		
 	i2c_stop_on_bus(I2C1);
     /* wait until stop condition generate */ 
-	
 	while (I2C_CTL0(I2C1) & I2C_CTL0_STOP);  
 }
 
@@ -92,8 +88,6 @@ void AHT25_recieve(void)
     while(!i2c_flag_get(I2C1, I2C_FLAG_SBSEND));
     /* send slave address to I2C bus */
     i2c_master_addressing(I2C1, AHT25_Adress << 1, I2C_RECEIVER);
-    /* disable ACK before clearing ADDSEND bit */
-    //i2c_ack_config(I2C1, I2C_ACK_DISABLE);
     /* wait until ADDSEND bit is set */
     k = 0;
 	while (!i2c_flag_get(I2C1, I2C_FLAG_ADDSEND)) 
@@ -155,7 +149,7 @@ void AHT25_getMeasures( double *measuresArr)
 	double AHT25_Temperature;
 	double AHT25_Humidity;
 	
-		/* Convert to Temperature in °C */
+		/* Convert to Temperature in Â°C */
 	AHT25_ADC_Raw = (((uint32_t)AHT25_RX_Data[3] & 15) << 16) | ((uint32_t)AHT25_RX_Data[4] << 8) | AHT25_RX_Data[5];
 	AHT25_Temperature = (float)(AHT25_ADC_Raw * 200.00 / 1048576.00) - 50.00;
 		/* Convert to Relative Humidity in % */
